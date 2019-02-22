@@ -47,3 +47,33 @@ class Poll(models.Model):
             title=self.title,
             created_at=self.created_at
         )
+
+
+class PollOption(models.Model):
+    unique_id = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False
+    )
+    title = models.CharField(
+        max_length=NAME_FIELD_MAX_LENGTH
+    )
+    description = models.TextField(
+        blank=True
+    )
+    created_at = models.DateTimeField(
+        default=timezone.now
+    )
+    updated_at = models.DateTimeField(
+        default=timezone.now
+    )
+    poll = models.ForeignKey(
+        'poll',
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        """Return the model instance item name in django admin."""
+        return '{title} - {created_at}'.format(
+            title=self.title,
+            created_at=self.created_at
+        )
