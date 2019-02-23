@@ -1,5 +1,6 @@
 """polls app models."""
 import uuid
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
@@ -69,6 +70,39 @@ class PollOption(models.Model):
     poll = models.ForeignKey(
         'poll',
         on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        """Return the model instance item name in django admin."""
+        return '{title} - {created_at}'.format(
+            title=self.title,
+            created_at=self.created_at
+        )
+
+
+class PollOptionSelection(models.Model):
+    unique_id = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False
+    )
+    created_at = models.DateTimeField(
+        default=timezone.now
+    )
+    updated_at = models.DateTimeField(
+        default=timezone.now
+    )
+    poll = models.ForeignKey(
+        'poll',
+        on_delete=models.CASCADE,
+    )
+    poll_option = models.ForeignKey(
+        'polloption',
+        on_delete=models.CASCADE,
+    )
+    selection_priority = models.IntegerField()
+    voter_user = models.ForeignKey(
+      get_user_model(),
+      on_delete=models.CASCADE
     )
 
     def __str__(self):
