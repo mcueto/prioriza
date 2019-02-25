@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content%}
+  <div class="row">
+    <div class="col-md-12">
+      <a href="#" class="btn btn-primary float-right">
+        Create new poll
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-group list-group-flush">
+        {% for poll in polls %}
+          <li class="list-group-item bg-light">
+            {{ poll.title }}
+          </li>
+        {% endfor %}
+      </ul>
+
+    </div>
+  </div>
+
+{% endblock %}
