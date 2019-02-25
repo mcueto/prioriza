@@ -23,5 +23,5 @@ from .views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view()),
-    path('polls/', PollListView.as_view()),
+    path('polls/', PollListView.as_view(), name='poll_list'),
 ]
