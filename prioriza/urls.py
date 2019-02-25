@@ -18,10 +18,12 @@ from django.urls import path
 from .views import (
     IndexView,
     PollListView,
+    PollCreateView,
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view()),
     path('polls/', PollListView.as_view(), name='poll_list'),
+    path('polls/create', PollCreateView.as_view(), name='poll_create'),
 ]
