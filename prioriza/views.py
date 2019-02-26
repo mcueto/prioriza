@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import (
@@ -29,6 +30,20 @@ class UserListView(ListView):
     model = get_user_model()
     context_object_name = 'users'
     template_name = "users/list.html"
+
+
+class UserCreateView(CreateView):
+    template_name = 'users/create.html'
+    form_class = UserCreationForm
+    model = get_user_model()
+
+    def get_success_url(self, **kwargs):
+        """If form is valid, return the user to Users list view."""
+        success_url = reverse(
+            'user_list'
+        )
+
+        return success_url
 
 
 class PollListView(ListView):
