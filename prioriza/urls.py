@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from .views import (
     IndexView,
+    UserListView,
     PollListView,
     PollCreateView,
 )
@@ -24,6 +25,7 @@ from .views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view()),
+    path('users/', UserListView.as_view(), name='user_list'),
     path('polls/', PollListView.as_view(), name='poll_list'),
     path('polls/create', PollCreateView.as_view(), name='poll_create'),
 ]

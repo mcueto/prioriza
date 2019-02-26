@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import (
@@ -22,6 +23,12 @@ class IndexView(TemplateView):
         context['message'] = 'PRIORIZA INDEX VIEW TEMPLATE'
 
         return context
+
+
+class UserListView(ListView):
+    model = get_user_model()
+    context_object_name = 'users'
+    template_name = "users/list.html"
 
 
 class PollListView(ListView):
