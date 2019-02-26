@@ -30,6 +30,9 @@ ALLOWED_HOSTS = [
     os.environ.get('APP_HOST')
 ]
 
+INTERNAL_IPS = [
+    os.environ.get('INTERNAL_IP')
+]
 
 # Application definition
 
