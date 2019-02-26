@@ -33,7 +33,8 @@ class Poll(models.Model):
     )
     current_status = models.CharField(
         max_length=CODE_FIELD_MAX_LENGTH,
-        choices=POLL_STATUS_CHOICES
+        choices=POLL_STATUS_CHOICES,
+        default='created'
     )
     created_at = models.DateTimeField(
         default=timezone.now
