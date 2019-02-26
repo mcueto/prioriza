@@ -14,7 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from polls.viewsets import (
+    PollViewSet,
+)
 from .views import (
     IndexView,
     UserListView,
@@ -23,6 +27,10 @@ from .views import (
     PollCreateView,
 )
 
+
+router = DefaultRouter()
+router.register(r'polls', PollViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='index'),
@@ -30,4 +38,5 @@ urlpatterns = [
     path('users/create', UserCreateView.as_view(), name='user_create'),
     path('polls/', PollListView.as_view(), name='poll_list'),
     path('polls/create', PollCreateView.as_view(), name='poll_create'),
+    path('api/', include(router.urls)),
 ]
