@@ -30,3 +30,34 @@ class PollOptionSelectionSerializer(serializers.ModelSerializer):
         fields = (
             '__all__'
         )
+
+
+# Poll create endpoint serializers
+class PollCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poll
+        fields = (
+            'code',
+            'title',
+            'description',
+        )
+
+
+class PollOptionCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PollOption
+        fields = (
+            'name',
+            'description',
+        )
+
+
+class PollCreateSerializer(serializers.Serializer):
+    poll = PollCreateSerializer()
+    poll_options = PollOptionCreateSerializer(many=True)
+
+    class Meta:
+        fields = (
+            'poll',
+            'poll_options',
+        )
