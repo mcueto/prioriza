@@ -40,5 +40,5 @@ urlpatterns = [
     path('polls/', PollListView.as_view(), name='poll_list'),
     path('polls/create', PollCreateView.as_view(), name='poll_create'),
     path('api/', include(router.urls)),
-    path('api/polls_create', CreatePollAPIView.as_view()),
+    path('api/polls_create/', CreatePollAPIView.as_view()),
 ]
