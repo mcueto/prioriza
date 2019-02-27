@@ -1,5 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+)
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import (
@@ -21,13 +25,13 @@ class IndexView(TemplateView):
         return context
 
 
-class UserListView(ListView):
+class UserListView(LoginRequiredMixin, ListView):
     model = get_user_model()
     context_object_name = 'users'
     template_name = "users/list.html"
 
 
-class UserCreateView(CreateView):
+class UserCreateView(LoginRequiredMixin, CreateView):
     template_name = 'users/create.html'
     form_class = UserCreationForm
     model = get_user_model()
@@ -41,13 +45,14 @@ class UserCreateView(CreateView):
         return success_url
 
 
-class PollListView(ListView):
+
+class PollListView(LoginRequiredMixin, ListView):
     model = Poll
     context_object_name = 'polls'
     template_name = "poll/list.html"
 
 
-class PollCreateView(TemplateView):
+class PollCreateView(LoginRequiredMixin, TemplateView):
     template_name = 'poll/create.html'
 
     def get_context_data(self, **kwargs):
