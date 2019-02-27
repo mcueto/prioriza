@@ -25,7 +25,7 @@ class Poll(models.Model):
     code = models.CharField(
         max_length=CODE_FIELD_MAX_LENGTH
     )
-    title = models.CharField(
+    name = models.CharField(
         max_length=NAME_FIELD_MAX_LENGTH
     )
     description = models.TextField(
@@ -45,8 +45,8 @@ class Poll(models.Model):
 
     def __str__(self):
         """Return the model instance item name in django admin."""
-        return '{title} - {created_at}'.format(
-            title=self.title,
+        return '{name} - {created_at}'.format(
+            name=self.name,
             created_at=self.created_at
         )
 
@@ -76,7 +76,7 @@ class PollOption(models.Model):
     def __str__(self):
         """Return the model instance item name in django admin."""
         return '{name} - {created_at}'.format(
-            title=self.name,
+            name=self.name,
             created_at=self.created_at
         )
 

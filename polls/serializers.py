@@ -38,7 +38,7 @@ class PollCreateSerializer(serializers.ModelSerializer):
         model = Poll
         fields = (
             'code',
-            'title',
+            'name',
             'description',
         )
 

@@ -15,7 +15,7 @@ class PollForm(ModelForm):
         fields = [
             # 'unique_id',
             'code',
-            'title',
+            'name',
             'description',
             'current_status',
             # 'created_at',
