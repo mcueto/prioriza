@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content%}
+  <div class="row">
+    <div class="col-md-12">
+      {% include 'components/forms/create_model.html' with back_url='user_list' form_title='Login' submit_text='Login' %}
+    </div>
+  </div>
+{% endblock %}

@@ -34,6 +34,7 @@ router.register(r'polls', PollViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', IndexView.as_view(), name='index'),
     path('users/', UserListView.as_view(), name='user_list'),
     path('users/create', UserCreateView.as_view(), name='user_create'),
