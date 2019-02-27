@@ -56,7 +56,7 @@ class PollOption(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    title = models.CharField(
+    name = models.CharField(
         max_length=NAME_FIELD_MAX_LENGTH
     )
     description = models.TextField(
@@ -75,8 +75,8 @@ class PollOption(models.Model):
 
     def __str__(self):
         """Return the model instance item name in django admin."""
-        return '{title} - {created_at}'.format(
-            title=self.title,
+        return '{name} - {created_at}'.format(
+            title=self.name,
             created_at=self.created_at
         )
 
