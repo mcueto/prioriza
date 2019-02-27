@@ -55,4 +55,8 @@ class PollCreateView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['api_base_url'] = self.request.build_absolute_uri('../api')
+        context['poll_list_url'] = reverse(
+            'poll_list'
+        )
         return context

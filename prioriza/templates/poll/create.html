@@ -1,10 +1,188 @@
 {% extends 'base.html' %}
 
 {% block content%}
-  <div class="row">
-    <div class="col-md-12">
-      {% include 'components/forms/create_model.html' with back_url='poll_list'  %}
+  <div id="poll_create_form">
+
+    <div class="form-group">
+      <label>
+        Creating a new Poll
+      </label>
+      <p>
+      </p>
     </div>
+
+    {% verbatim %}
+    <div class="form-group">
+      <label>
+        Name
+      </label>
+      <input type="text" class="form-control" required="" v-model="poll_creation_data.poll.name" v-on:keyup="setCode" placeholder="Add a name to your Poll">
+    </div>
+
+    <div class="form-group">
+      <label>
+        Description
+      </label>
+      <textarea type="text" class="form-control" required="" v-model="poll_creation_data.poll.description" placeholder="Describe your Poll">
+      </textarea>
+    </div>
+
+    <div class="row">
+
+      <div class="col-8">
+        <div class="form-group">
+          <label>
+            Budget
+          </label>
+          <input type="number" class="form-control" required="" v-model="poll_creation_data.poll.budget">
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="form-group">
+          <label>
+            Currency
+          </label>
+          <select class="form-control" v-model="poll_creation_data.poll.currency">
+            <option v-for="currency in currency_list" v-bind:value="currency.code">
+              {{ currency.code }} - {{ currency.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <label>
+      Options
+    </label>
+    <div class="form-group row" v-for="(option, index) in poll_creation_data.poll_options">
+      <div class="col-1">
+        <button class="btn" v-on:click="removePollOption(index)" v-if="poll_creation_data.poll_options.length > 3">
+          <i class="fas fa-minus"></i>
+        </button>
+      </div>
+      <div class="col-7">
+        <input type="text" class="form-control" required="" v-model="option.name" placeholder="Option name">
+      </div>
+      <div class="col-4">
+        <input type="number" class="form-control" required="" v-model="option.cost" placeholder="Option cost">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-12 text-center">
+        <button class="btn btn-secondary" v-on:click="addPollOption">
+          Add option
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <a href="#" class="btn btn-secondary">
+          Cancel
+        </a>
+      </div>
+
+      <div class="col-6">
+        <button class="btn btn-primary col-6 float-right" v-on:click="savePoll">
+          Save Poll
+        </button>
+      </div>
+    </div>
+
+    {% endverbatim %}
+
   </div>
 
+{% endblock %}
+
+{% block  js %}
+  {{ block.super }}
+
+  <script type="text/javascript">
+    const store = new JSData.DataStore();
+    const httpAdapter = new JSDataHttp.HttpAdapter({
+      basePath: '{{ api_base_url | safe }}',
+      beforeHTTP: function (config, opts) {
+        config.headers || (config.headers = {});
+        config.headers['X-CSRFToken'] = '{{ csrf_token | safe }}';
+
+        // Now do the default behavior
+        return JSDataHttp.HttpAdapter.prototype.beforeHTTP.call(this, config, opts);
+      },
+    });
+
+    // "store" will now use an HTTP adapter by default
+    store.registerAdapter('http', httpAdapter, { 'default': true });
+
+    // Define a Mapper for a "poll" resource
+    store.defineMapper(
+      'poll',
+      {
+        endpoint: 'polls_create/'
+      }
+    );
+
+    store.findAll('poll', {'force': true}).then(function(data){
+      console.log(data);
+    });
+  </script>
+
+  <script type="text/javascript">
+    var empty_option = {
+        name: '',
+        id: '',
+        cost: '',
+    };
+
+    var app = new Vue({
+      el: '#poll_create_form',
+      data: {
+        currency_list: [
+          {
+            code: 'CLP',
+            name: 'Chilean peso',
+          }
+        ],
+        poll_creation_data: {
+          poll: {
+            code: '',
+            name: '',
+            description: '',
+            budget: '',
+            currency: '',
+          },
+          poll_options: [
+            Object.assign({}, empty_option),
+            Object.assign({}, empty_option),
+            Object.assign({}, empty_option),
+          ],
+        },
+      },
+      methods: {
+        setCode: function (event) {
+          this.poll_creation_data.poll.code = this.poll_creation_data.poll.name.trim().toUpperCase().replace(/ /g, '_');
+        },
+        addPollOption: function (event) {
+          this.poll_creation_data.poll_options.push(Object.assign({}, empty_option));
+        },
+        removePollOption: function (index) {
+          this.poll_creation_data.poll_options.splice(index, 1);
+        },
+        savePoll: function (event) {
+          store.create('poll', this.poll_creation_data).then(
+            function(data){
+              alert("Your poll was successfully created, now you're being redirected");
+              window.location.href='{{ poll_list_url }}';
+            },
+            function(data){
+              alert("This poll cannot be created, please check all your data is correct");
+            }
+          );
+        },
+      }
+    });
+  </script>
 {% endblock %}
