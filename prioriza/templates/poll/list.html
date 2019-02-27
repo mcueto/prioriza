@@ -3,8 +3,20 @@
 {% block content%}
   <div class="row">
     <div class="col-md-12">
+      <div class="form-group">
+        <label>
+          Poll list
+        </label>
+        <p>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
       <a href="{% url 'poll_create' %}" class="btn btn-primary float-right">
-        <i class="fas fa-plus"></i>
+        <i class="fas fa-plus"></i> Create new Poll
       </a>
     </div>
   </div>
@@ -14,7 +26,18 @@
       <ul class="list-group list-group-flush">
         {% for poll in polls %}
           <li class="list-group-item bg-light">
-            {{ poll.title }}
+            {% if poll.current_status == 'created' %}
+              <i class="far fa-circle text-warning"></i>
+            {% elif poll.current_status == 'open' %}
+              <i class="fas fa-spinner fa-spin text-success"></i>
+            {% elif poll.current_status == 'finished' %}
+              <i class="far fa-check-circle text-success"></i>
+            {% elif poll.current_status == 'archived' %}
+              <i class="fas fa-archive text-success"></i>
+            {% else %}
+              {{ poll.current_status }}
+            {% endif %}
+            {{ poll.name }}
           </li>
         {% endfor %}
       </ul>
