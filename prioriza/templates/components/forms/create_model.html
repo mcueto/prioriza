@@ -4,14 +4,6 @@
 
   <div class="row">
     <div class="col-12">
-      <a href="{% url back_url %}" class="btn btn-secondary float-left mb-4">
-        <i class="fas fa-arrow-left"></i>
-      </a>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
       {% csrf_token %}
 
       {# Include the hidden fields #}
@@ -19,9 +11,11 @@
         {{ hidden }}
       {% endfor %}
 
-      <h3 class="text-center">
-        {{ form_title }}
-      </h3>
+      <div class="form-group">
+        <label>
+          {{ form_title }}
+        </label>
+      </div>
 
       <fieldset>
         {# Include the visible fields #}
@@ -53,7 +47,17 @@
 
         {% endfor %}
 
-        <input type="submit" class="btn btn-primary float-right mb-4" href="{{ submit_url }}" value="Save">
+        <div class="row">
+          <div class="col-6">
+            <a href="{% url back_url %}" class="btn btn-secondary">
+              Cancel
+            </a>
+          </div>
+
+          <div class="col-6">
+            <input type="submit" class="btn btn-primary float-right mb-4" href="{{ submit_url }}" value="Save user">
+          </div>
+        </div>
 
       </fieldset>
 
