@@ -40,6 +40,7 @@ class PollCreateSerializer(serializers.ModelSerializer):
             'code',
             'name',
             'description',
+            'budget',
         )
 
 

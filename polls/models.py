@@ -31,6 +31,9 @@ class Poll(models.Model):
     description = models.TextField(
         blank=True
     )
+    budget = models.FloatField(
+        default=0
+    )
     current_status = models.CharField(
         max_length=CODE_FIELD_MAX_LENGTH,
         choices=POLL_STATUS_CHOICES,
