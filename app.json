@@ -1,0 +1,21 @@
+{
+    "name": "prioriza",
+    "repository": "https://github.com/mcueto/prioriza/",
+    "success_url": "/",
+    "scripts": {
+        "postdeploy": "python manage.py migrate"
+    },
+    "addons": [
+        "heroku-postgresql:hobby-dev"
+    ],
+    "env": {
+      "PORT": "5000",
+      "SECRET_KEY": {
+        "description": "This gets generated",
+        "generator": "secret"
+      },
+      "DEBUG": "False",
+      "APP_HOST": "prioriza.herokuapp.com",
+      "INTERNAL_IP": "127.0.0.1",
+    },
+}
