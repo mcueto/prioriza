@@ -102,7 +102,7 @@ class PollOptionSelection(models.Model):
         'polloption',
         on_delete=models.CASCADE,
     )
-    selection_priority = models.IntegerField()
+    priority = models.IntegerField()
 
     def __str__(self):
         """Return the model instance item name in django admin."""
