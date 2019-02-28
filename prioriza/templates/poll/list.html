@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load check_permission %}
 
 {% block content%}
   <div class="row">
@@ -15,9 +16,11 @@
 
   <div class="row">
     <div class="col-md-12">
+      {% if user|check_permission:'polls.add_poll' %}
       <a href="{% url 'poll_create' %}" class="btn btn-primary float-right">
         <i class="fas fa-plus"></i> Create new Poll
       </a>
+      {% endif %}
     </div>
   </div>
 
