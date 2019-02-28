@@ -60,9 +60,9 @@ python manage.py migrate
 ```
 - Create default user(admin user):
 
-  username:`prioriza`
+  username:`priorizate`
 
-  password:`aziroirp`
+  password:`etaziroirp`
 ``` shell
 python manage.py runscript create_default_user
 ```
