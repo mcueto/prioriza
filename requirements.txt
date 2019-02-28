@@ -4,6 +4,8 @@ django-extensions==2.1.5
 djangorestframework==3.9.1
 gunicorn==19.9.0
 psycopg2-binary==2.7.7
+python-graph-core==1.8.2
+python3-vote-core==20170329.0
 pytz==2018.9
 rest-framework-apicontrol==0.7.7
 six==1.12.0
