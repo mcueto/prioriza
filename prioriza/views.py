@@ -116,6 +116,29 @@ class PollDetailView(LoginRequiredMixin, TemplateView):
 
         return context
 
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        # Get data from context
+        poll = context['poll']
+        votes_cast = context['votes_cast']
+        users_count = context['users_count']
+        voted_by_current_user = context['voted_by_current_user']
+
+        if voted_by_current_user or (votes_cast == users_count):
+            redirect_url = reverse(
+                'poll_result',
+                kwargs={
+                    'unique_id': poll.unique_id
+                }
+            )
+
+            return HttpResponseRedirect(
+                redirect_url
+            )
+
+        return super(PollDetailView, self).get(request, *args, **kwargs)
+
 
 class PollResultView(LoginRequiredMixin, TemplateView):
     template_name = 'poll/result.html'
