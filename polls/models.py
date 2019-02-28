@@ -3,6 +3,10 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
+from rest_framework_apicontrol.mixins import (
+    TrackableModelMixin,
+    UniqueIDModelMixin,
+)
 
 # Fields constants
 CODE_FIELD_MAX_LENGTH = 128
@@ -17,11 +21,7 @@ POLL_STATUS_CHOICES = (
 )
 
 
-class Poll(models.Model):
-    unique_id = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False
-    )
+class Poll(TrackableModelMixin, UniqueIDModelMixin):
     code = models.CharField(
         max_length=CODE_FIELD_MAX_LENGTH
     )
@@ -39,12 +39,6 @@ class Poll(models.Model):
         choices=POLL_STATUS_CHOICES,
         default='created'
     )
-    created_at = models.DateTimeField(
-        default=timezone.now
-    )
-    updated_at = models.DateTimeField(
-        default=timezone.now
-    )
 
     def __str__(self):
         """Return the model instance item name in django admin."""
@@ -54,11 +48,7 @@ class Poll(models.Model):
         )
 
 
-class PollOption(models.Model):
-    unique_id = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False
-    )
+class PollOption(TrackableModelMixin, UniqueIDModelMixin):
     name = models.CharField(
         max_length=NAME_FIELD_MAX_LENGTH
     )
@@ -67,12 +57,6 @@ class PollOption(models.Model):
     )
     cost = models.FloatField(
         default=0
-    )
-    created_at = models.DateTimeField(
-        default=timezone.now
-    )
-    updated_at = models.DateTimeField(
-        default=timezone.now
     )
     poll = models.ForeignKey(
         'poll',
@@ -87,17 +71,7 @@ class PollOption(models.Model):
         )
 
 
-class PollOptionSelection(models.Model):
-    unique_id = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False
-    )
-    created_at = models.DateTimeField(
-        default=timezone.now
-    )
-    updated_at = models.DateTimeField(
-        default=timezone.now
-    )
+class PollOptionSelection(TrackableModelMixin, UniqueIDModelMixin):
     poll_option = models.ForeignKey(
         'polloption',
         on_delete=models.CASCADE,
@@ -112,17 +86,7 @@ class PollOptionSelection(models.Model):
         )
 
 
-class PollVote(models.Model):
-    unique_id = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False
-    )
-    created_at = models.DateTimeField(
-        default=timezone.now
-    )
-    updated_at = models.DateTimeField(
-        default=timezone.now
-    )
+class PollVote(TrackableModelMixin, UniqueIDModelMixin):
     poll = models.ForeignKey(
         'poll',
         on_delete=models.CASCADE,
