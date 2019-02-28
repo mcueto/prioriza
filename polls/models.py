@@ -98,19 +98,11 @@ class PollOptionSelection(models.Model):
     updated_at = models.DateTimeField(
         default=timezone.now
     )
-    poll = models.ForeignKey(
-        'poll',
-        on_delete=models.CASCADE,
-    )
     poll_option = models.ForeignKey(
         'polloption',
         on_delete=models.CASCADE,
     )
     selection_priority = models.IntegerField()
-    voter_user = models.ForeignKey(
-      get_user_model(),
-      on_delete=models.CASCADE
-    )
 
     def __str__(self):
         """Return the model instance item name in django admin."""
