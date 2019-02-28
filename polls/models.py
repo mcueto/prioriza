@@ -42,6 +42,7 @@ class Poll(TrackableModelMixin, UniqueIDModelMixin):
     )
 
     def get_winners(self):
+        poll_options = []
         winners = []
         budget = self.budget
         vote_list = self.pollvote_set.all()
@@ -74,15 +75,19 @@ class Poll(TrackableModelMixin, UniqueIDModelMixin):
                 winners.append(irv.winner)
 
                 poll_option2 = PollOption.objects.get(unique_id=irv.winner)
+                poll_options.append(poll_option2)
+
                 budget -= poll_option2.cost
 
-        return PollOption.objects.filter(
-            unique_id__in=winners
-        )
+        return poll_options
 
     def get_loosers(self):
-        discarded_poll_options = self.polloption_set.all().difference(
-            self.get_winners()
+        poll_options = list(
+            self.polloption_set.all()
+        )
+
+        discarded_poll_options = list(
+            set(poll_options) - set(self.get_winners())
         )
 
         return discarded_poll_options
