@@ -80,6 +80,13 @@ class Poll(TrackableModelMixin, UniqueIDModelMixin):
             unique_id__in=winners
         )
 
+    def get_loosers(self):
+        discarded_poll_options = self.polloption_set.all().difference(
+            self.get_winners()
+        )
+
+        return discarded_poll_options
+
     def __str__(self):
         """Return the model instance item name in django admin."""
         return '{name} - {created_at}'.format(
