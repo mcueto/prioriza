@@ -134,4 +134,8 @@ class PollResultView(LoginRequiredMixin, TemplateView):
         context['votes_cast'] = poll.pollvote_set.count()
         context['users_count'] = get_user_model().objects.all().count()
 
+        context['voted_by_current_user'] = poll.pollvote_set.filter(
+            voter_user=self.request.user
+        ).exists()
+
         return context

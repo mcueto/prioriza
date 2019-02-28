@@ -170,12 +170,19 @@
 
     <div class="row">
       <div class="col-6">
-        <a href="{% url 'poll_detail' poll.unique_id %}" class="btn btn-secondary">
+        <a href="{% url 'poll_list' %}" class="btn btn-secondary">
           Back
         </a>
       </div>
 
       <div class="col-6">
+        {% if voted_by_current_user %}
+        <button class="btn btn-primary col-6 float-right" disabled>
+          <span v-if="voted_by_current_user">
+            You voted
+          </span>
+        </button>
+        {% endif %}
       </div>
     </div>
 
