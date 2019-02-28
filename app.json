@@ -16,6 +16,9 @@
     },
     "DEBUG": "False",
     "APP_HOST": "prioriza.herokuapp.com",
-    "INTERNAL_IP": "127.0.0.1"
+    "INTERNAL_IP": "127.0.0.1",
+    "DEFAULT_USER_USERNAME": "priorizate",
+    "DEFAULT_USER_PASSWORD": "etaziroirp",
+    "DEFAULT_USER_EMAIL": "user@domain.com"
   }
 }

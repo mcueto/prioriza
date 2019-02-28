@@ -4,3 +4,6 @@ export DEBUG=True
 export APP_HOST='127.0.0.1'
 export INTERNAL_IP='127.0.0.1'
 export DATABASE_URL='postgres://prioriza:prioriza@127.0.0.1:5432/prioriza'
+export DEFAULT_USER_USERNAME='priorizate'
+export DEFAULT_USER_PASSWORD='etaziroirp'
+export DEFAULT_USER_EMAIL='user@domain.com'
