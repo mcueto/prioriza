@@ -3,7 +3,7 @@
   "repository": "https://github.com/mcueto/prioriza/",
   "success_url": "/",
   "scripts": {
-    "postdeploy": "python manage.py migrate"
+    "postdeploy": "python manage.py migrate && python manage.py runscript create_default_user"
   },
   "addons": [
     "heroku-postgresql:hobby-dev"
