@@ -36,7 +36,7 @@ docker run --name prioriza -e POSTGRES_USER=prioriza -p 5432:5432 -d postgres:10
 To deploy in your local machine you must follow the following steps:
 - Clone the repo
 ``` shell
-https://github.com/mcueto/prioriza/
+git clone https://github.com/mcueto/prioriza/
 ```
 - Get into repo folder
 ``` shell
@@ -58,7 +58,11 @@ source setenvvars.sh
 ``` shell
 python manage.py migrate
 ```
-- Create default user(admin user)
+- Create default user(admin user):
+
+  username:`prioriza`
+
+  password:`aziroirp`
 ``` shell
 python manage.py runscript create_default_user
 ```
