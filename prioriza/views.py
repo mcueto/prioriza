@@ -115,3 +115,23 @@ class PollDetailView(LoginRequiredMixin, TemplateView):
         ).exists()
 
         return context
+
+
+class PollResultView(LoginRequiredMixin, TemplateView):
+    template_name = 'poll/result.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        poll = Poll.objects.get(unique_id=kwargs.get('unique_id'))
+        winner_poll_options = poll.get_winners()
+        looser_poll_options = poll.get_loosers()
+
+        context['poll'] = poll
+        context['winner_poll_options'] = winner_poll_options
+        context['looser_poll_options'] = looser_poll_options
+
+        context['votes_cast'] = poll.pollvote_set.count()
+        context['users_count'] = get_user_model().objects.all().count()
+
+        return context

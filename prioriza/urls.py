@@ -28,6 +28,7 @@ from .views import (
     PollListView,
     PollCreateView,
     PollDetailView,
+    PollResultView,
 )
 
 
@@ -43,6 +44,7 @@ urlpatterns = [
     path('polls/', PollListView.as_view(), name='poll_list'),
     path('polls/create', PollCreateView.as_view(), name='poll_create'),
     path('polls/<uuid:unique_id>/detail', PollDetailView.as_view(), name='poll_detail'),
+    path('polls/<uuid:unique_id>/results', PollResultView.as_view(), name='poll_result'),
     path('api/', include(router.urls)),
     path('api/polls_create/', CreatePollAPIView.as_view()),
     path('api/polls_vote/', VoteAPIView.as_view()),
