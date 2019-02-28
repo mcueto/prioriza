@@ -135,7 +135,8 @@ class PollVote(models.Model):
       on_delete=models.CASCADE
     )
 
-    unique_together = (("poll", "voter_user"),)
+    class Meta:
+        unique_together = (("poll", "voter_user"),)
 
     def __str__(self):
         """Return the model instance item name in django admin."""
