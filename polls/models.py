@@ -65,6 +65,9 @@ class PollOption(models.Model):
     description = models.TextField(
         blank=True
     )
+    cost = models.FloatField(
+        default=0
+    )
     created_at = models.DateTimeField(
         default=timezone.now
     )
