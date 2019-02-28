@@ -5,6 +5,10 @@ body{
   font-family: 'Hind', sans-serif;
 }
 
+p{
+  text-align: justify;
+}
+
 .logo, .nav-item{
   font-family: 'Bungee', cursive;
 }
