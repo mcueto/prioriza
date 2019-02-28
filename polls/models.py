@@ -106,8 +106,8 @@ class PollOptionSelection(models.Model):
 
     def __str__(self):
         """Return the model instance item name in django admin."""
-        return '{title} - {created_at}'.format(
-            title=self.title,
+        return '{name} - {created_at}'.format(
+            name=self.poll_option.name,
             created_at=self.created_at
         )
 
