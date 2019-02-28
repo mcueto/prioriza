@@ -19,6 +19,7 @@ from rest_framework.routers import DefaultRouter
 from polls.viewsets import (
     PollViewSet,
     CreatePollAPIView,
+    VoteAPIView,
 )
 from .views import (
     IndexView,
@@ -42,4 +43,5 @@ urlpatterns = [
     path('polls/create', PollCreateView.as_view(), name='poll_create'),
     path('api/', include(router.urls)),
     path('api/polls_create/', CreatePollAPIView.as_view()),
+    path('api/polls_vote/', VoteAPIView.as_view()),
 ]
