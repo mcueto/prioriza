@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
 )
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import (
@@ -27,6 +28,18 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         return context
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            redirect_url = reverse(
+                'poll_list'
+            )
+
+            return HttpResponseRedirect(
+                redirect_url
+            )
+
+        return super(IndexView, self).get(request)
 
 
 class UserListView(LoginRequiredMixin, ListView):
