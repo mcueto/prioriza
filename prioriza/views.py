@@ -62,7 +62,6 @@ class UserCreateView(LoginRequiredMixin, CreateView):
         return success_url
 
 
-
 class PollListView(LoginRequiredMixin, ListView):
     model = Poll
     context_object_name = 'polls'
