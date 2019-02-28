@@ -1,5 +1,6 @@
 """polls app models."""
 import uuid
+from py3votecore.irv import IRV
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
@@ -39,6 +40,45 @@ class Poll(TrackableModelMixin, UniqueIDModelMixin):
         choices=POLL_STATUS_CHOICES,
         default='created'
     )
+
+    def get_winners(self):
+        winners = []
+        budget = self.budget
+        vote_list = self.pollvote_set.all()
+
+        for poll_option in self.polloption_set.all():
+            ballots = []
+
+            for vote in vote_list:
+                ballot = []
+                ballot_data = vote.poll_option_selections.exclude(
+                    poll_option__unique_id__in=winners
+                ).exclude(
+                    poll_option__cost__gt=budget
+                ).order_by('priority').values_list(
+                  'poll_option__unique_id',
+                  flat=True
+                )
+
+                for data in ballot_data:
+                    ballot.append(str(data))
+
+                if len(ballot) > 0:
+                    ballots.append({
+                        "count": 1,
+                        "ballot": ballot
+                    })
+
+            if len(ballots) > 0:
+                irv = IRV(ballots)
+                winners.append(irv.winner)
+
+                poll_option2 = PollOption.objects.get(unique_id=irv.winner)
+                budget -= poll_option2.cost
+
+            return PollOption.objects.filter(
+                unique_id__in=winners
+            )
 
     def __str__(self):
         """Return the model instance item name in django admin."""
