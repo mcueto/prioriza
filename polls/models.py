@@ -127,6 +127,9 @@ class PollVote(models.Model):
         'poll',
         on_delete=models.CASCADE,
     )
+    poll_option_selections = models.ManyToManyField(
+        'polloptionselection'
+    )
     voter_user = models.ForeignKey(
       get_user_model(),
       on_delete=models.CASCADE
