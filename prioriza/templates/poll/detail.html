@@ -72,7 +72,7 @@
       </div>
       <div class="col-8">
         <i class="fas fa-info-circle text-info"></i>
-        {{ option.name }} - {{ option.cost }} 1 CLP
+        {{ option.name }} - {{ option.cost }}
       </div>
       <div class="col-2">
         <!-- If it's not the last item -->
@@ -82,24 +82,6 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-6">
-        <a href="#" class="btn btn-secondary">
-          Back
-        </a>
-      </div>
-
-      <div class="col-6">
-        <button class="btn btn-primary col-6 float-right" v-on:click="savePollVote" v-bind:disabled="voted_by_current_user">
-          <span v-if="!voted_by_current_user">
-            Vote
-          </span>
-          <span v-if="voted_by_current_user">
-            You voted
-          </span>
-        </button>
-      </div>
-    </div>
     {% endverbatim %}
 
     <hr>
@@ -117,6 +99,27 @@
       </div>
 
     </div>
+
+    <div class="row">
+      <div class="col-6">
+        <a href="{% url 'poll_list' %}" class="btn btn-secondary">
+          Back
+        </a>
+      </div>
+
+    {% verbatim %}
+      <div class="col-6">
+        <button class="btn btn-primary col-6 float-right" v-on:click="savePollVote" v-bind:disabled="voted_by_current_user">
+          <span v-if="!voted_by_current_user">
+            Vote
+          </span>
+          <span v-if="voted_by_current_user">
+            You voted
+          </span>
+        </button>
+      </div>
+    </div>
+    {% endverbatim %}
 
   </div>
 
