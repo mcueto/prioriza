@@ -50,6 +50,7 @@ class PollListView(LoginRequiredMixin, ListView):
     model = Poll
     context_object_name = 'polls'
     template_name = "poll/list.html"
+    ordering = ['-created_at']
 
 
 class PollCreateView(LoginRequiredMixin, TemplateView):
