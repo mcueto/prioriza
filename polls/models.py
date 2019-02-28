@@ -76,9 +76,9 @@ class Poll(TrackableModelMixin, UniqueIDModelMixin):
                 poll_option2 = PollOption.objects.get(unique_id=irv.winner)
                 budget -= poll_option2.cost
 
-            return PollOption.objects.filter(
-                unique_id__in=winners
-            )
+        return PollOption.objects.filter(
+            unique_id__in=winners
+        )
 
     def __str__(self):
         """Return the model instance item name in django admin."""
