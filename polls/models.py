@@ -115,3 +115,33 @@ class PollOptionSelection(models.Model):
             title=self.title,
             created_at=self.created_at
         )
+
+
+class PollVote(models.Model):
+    unique_id = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False
+    )
+    created_at = models.DateTimeField(
+        default=timezone.now
+    )
+    updated_at = models.DateTimeField(
+        default=timezone.now
+    )
+    poll = models.ForeignKey(
+        'poll',
+        on_delete=models.CASCADE,
+    )
+    voter_user = models.ForeignKey(
+      get_user_model(),
+      on_delete=models.CASCADE
+    )
+
+    unique_together = (("poll", "voter_user"),)
+
+    def __str__(self):
+        """Return the model instance item name in django admin."""
+        return '{unique_id} - {created_at}'.format(
+            unique_id=self.unique_id,
+            created_at=self.created_at
+        )
