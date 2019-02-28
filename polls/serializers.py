@@ -59,6 +59,7 @@ class PollOptionCreateSerializer(serializers.ModelSerializer):
         fields = (
             'name',
             'description',
+            'cost',
         )
 
 
