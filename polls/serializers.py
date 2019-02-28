@@ -5,6 +5,7 @@ from .models import (
     Poll,
     PollOption,
     PollOptionSelection,
+    PollVote,
 )
 
 
@@ -27,6 +28,14 @@ class PollOptionSerializer(serializers.ModelSerializer):
 class PollOptionSelectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollOptionSelection
+        fields = (
+            '__all__'
+        )
+
+
+class PollVoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PollVote
         fields = (
             '__all__'
         )
