@@ -42,16 +42,18 @@ class IndexView(TemplateView):
         return super(IndexView, self).get(request)
 
 
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = get_user_model()
     context_object_name = 'users'
     template_name = "users/list.html"
+    permission_required = 'auth.add_user'
 
 
-class UserCreateView(LoginRequiredMixin, CreateView):
+class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'users/create.html'
     form_class = UserCreationForm
     model = get_user_model()
+    permission_required = 'auth.add_user'
 
     def get_success_url(self, **kwargs):
         """If form is valid, return the user to Users list view."""
@@ -69,8 +71,9 @@ class PollListView(LoginRequiredMixin, ListView):
     ordering = ['-created_at']
 
 
-class PollCreateView(LoginRequiredMixin, TemplateView):
+class PollCreateView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     template_name = 'poll/create.html'
+    permission_required = 'polls.add_poll'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
