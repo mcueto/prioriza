@@ -37,7 +37,18 @@
             {% else %}
               {{ poll.current_status }}
             {% endif %}
-            {{ poll.name }}
+            <a href="{% url 'poll_detail' poll.unique_id %}">
+              {{ poll.name }}
+            </a>
+            <p>
+              <i>
+                {% if poll.description %}
+                  {{ poll.description }}
+                {% else %}
+                  This poll has no description
+                {% endif %}
+              </i>
+            </p>
           </li>
         {% endfor %}
       </ul>
