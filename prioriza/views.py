@@ -11,8 +11,12 @@ from django.views.generic import (
     ListView,
 )
 from django.views.generic.base import TemplateView
+from rest_framework.renderers import JSONRenderer
 from polls.models import (
     Poll,
+)
+from polls.serializers import (
+    PollOptionSerializer,
 )
 
 
@@ -63,4 +67,38 @@ class PollCreateView(LoginRequiredMixin, TemplateView):
         context['poll_list_url'] = reverse(
             'poll_list'
         )
+        return context
+
+
+class PollDetailView(LoginRequiredMixin, TemplateView):
+    template_name = 'poll/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        poll = Poll.objects.get(unique_id=kwargs.get('unique_id'))
+        poll_options_data = JSONRenderer().render(
+            PollOptionSerializer(
+                poll.polloption_set.all().order_by('created_at'),
+                many=True
+            ).data
+        ).decode()
+
+        context['api_base_url'] = self.request.build_absolute_uri('../../api')
+        context['poll_detail_url'] = reverse(
+            'poll_detail',
+            kwargs={
+                'unique_id': poll.unique_id
+            }
+        )
+        context['poll'] = poll
+        context['poll_options_data'] = poll_options_data
+
+        context['votes_cast'] = poll.pollvote_set.count()
+        context['users_count'] = get_user_model().objects.all().count()
+
+        context['voted_by_current_user'] = poll.pollvote_set.filter(
+            voter_user=self.request.user
+        ).exists()
+
         return context

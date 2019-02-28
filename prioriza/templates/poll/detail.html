@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block content%}
+  <div id="poll_vote_form">
+
+    <div class="form-group">
+      <label>
+        Poll detail
+      </label>
+      <p>
+        The details of the vote are presented below. To give your preferences simply sort the options below using the buttons <span class="badge badge-secondary"><i class = "fas fa-arrow-up"></i></span> and <span class="badge badge-secondary"> <i class="fas fa-arrow-down"></i></span> from the one that seems most important to the least important and press the "vote" button.
+      </p>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+      <label>
+        Name
+      </label>
+      <p>
+        {{ poll.name }}
+      </p>
+    </div>
+
+
+    <div class="form-group">
+      <label>
+        Description
+      </label>
+      <p>
+        {{ poll.description }}
+      </p>
+    </div>
+
+    <div class="row">
+
+      <div class="col-8">
+        <div class="form-group">
+          <label>
+            Budget
+          </label>
+          <p>
+            {{ poll.budget }}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="form-group">
+          <label>
+            Currency
+          </label>
+          <p>
+            CLP - Peso Chileno
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    {% verbatim %}
+    <label>
+      Options
+    </label>
+    <div class="form-group row" v-for="(option, index) in poll_option_selection_data.poll_options">
+      <div class="col-2">
+        <!-- If it's not the first item -->
+        <span class="btn btn-secondary" v-on:click="goUpOption(index)" v-if="index > 0 && !voted_by_current_user">
+          <i class="fas fa-arrow-up"></i>
+        </span>
+      </div>
+      <div class="col-8">
+        <i class="fas fa-info-circle text-info"></i>
+        {{ option.name }} - {{ option.cost }} 1 CLP
+      </div>
+      <div class="col-2">
+        <!-- If it's not the last item -->
+        <span class="btn btn-secondary float-right" v-on:click="goDownOption(index)" v-if="index < poll_option_selection_data.poll_options.length-1  && !voted_by_current_user">
+          <i class="fas fa-arrow-down"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <a href="#" class="btn btn-secondary">
+          Back
+        </a>
+      </div>
+
+      <div class="col-6">
+        <button class="btn btn-primary col-6 float-right" v-on:click="savePollVote" v-bind:disabled="voted_by_current_user">
+          <span v-if="!voted_by_current_user">
+            Vote
+          </span>
+          <span v-if="voted_by_current_user">
+            You voted
+          </span>
+        </button>
+      </div>
+    </div>
+    {% endverbatim %}
+
+    <hr>
+    <div class="row">
+
+      <div class="col-12">
+        <div class="form-group text-center">
+          <label>
+            votes cast
+          </label>
+          <p class="text-center">
+            {{ votes_cast }} / {{ users_count }}
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+{% endblock %}
+
+{% block  js %}
+  {{ block.super }}
+
+  <script type="text/javascript">
+    const store = new JSData.DataStore();
+    const httpAdapter = new JSDataHttp.HttpAdapter({
+      basePath: '{{ api_base_url | safe }}',
+      beforeHTTP: function (config, opts) {
+        config.headers || (config.headers = {});
+        config.headers['X-CSRFToken'] = '{{ csrf_token | safe }}';
+
+        // Now do the default behavior
+        return JSDataHttp.HttpAdapter.prototype.beforeHTTP.call(this, config, opts);
+      },
+    });
+
+    // "store" will now use an HTTP adapter by default
+    store.registerAdapter('http', httpAdapter, { 'default': true });
+
+    // Define a Mapper for a "poll" resource
+    store.defineMapper(
+      'poll_option_selection',
+      {
+        endpoint: 'polls_vote/'
+      }
+    );
+  </script>
+
+  <script type="text/javascript">
+    function move(arr, old_index, new_index) {
+        while (old_index < 0) {
+            old_index += arr.length;
+        }
+        while (new_index < 0) {
+            new_index += arr.length;
+        }
+        if (new_index >= arr.length) {
+            var k = new_index - arr.length;
+            while ((k--) + 1) {
+                arr.push(undefined);
+            }
+        }
+         arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+       return arr;
+    }
+
+    var app = new Vue({
+      el: '#poll_vote_form',
+      data: {
+        // voted_by_current_user: false,
+        voted_by_current_user: {{ voted_by_current_user | lower }},
+        poll_option_selection_data: {
+          poll_unique_id: '{{ poll.unique_id }}',
+          poll_options: {{ poll_options_data | safe }},
+        },
+      },
+      methods: {
+        goUpOption: function (index) {
+          this.poll_option_selection_data.poll_options = move(this.poll_option_selection_data.poll_options, index, index-1);
+        },
+        goDownOption: function (index) {
+          this.poll_option_selection_data.poll_options = move(this.poll_option_selection_data.poll_options, index, index+1);
+        },
+        savePollVote: function (event) {
+          var poll_option_selection_create_data = {
+            'poll_unique_id': this.poll_option_selection_data.poll_unique_id,
+            'poll_option_selections': []
+          };
+
+          for (var index in this.poll_option_selection_data.poll_options) {
+            var poll_options_data = this.poll_option_selection_data.poll_options[index];
+
+            poll_option_selection_create_data['poll_option_selections'].push(
+              {
+                "poll_option_unique_id": poll_options_data['unique_id'],
+                "priority": parseInt(index)+1
+              }
+            );
+          }
+
+          store.create('poll_option_selection', poll_option_selection_create_data).then(
+            function(data){
+              alert("You voted successfully, reloading");
+              window.location.href='{{ poll_detail_url }}';
+            },
+            function(data){
+              alert("This vote is incorrect, please check all your data is correct");
+            }
+          );
+        },
+      }
+    });
+  </script>
+{% endblock %}
